@@ -44,5 +44,7 @@ function bufferInput(input) {
 
 function typeout(input) {
     console.log(input);
+    if (input == '_')
+        input = ' ';
     textbox.innerHTML += input;
 }

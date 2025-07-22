@@ -8,12 +8,14 @@ canvas.height = canvas.clientHeight;
 //const outerRadius = 100;
 //const innerRadius = 50;
 const OUTER_PADDING = 0;
-const LEGENDS_SHIFT_Y = 15;
-const POPOUTS_SHIFT_Y = 30;
+//const LEGENDS_SHIFT_Y = 15;
+//const POPOUTS_SHIFT_Y = 30;
+const LEGENDS_SHIFT_Y = -5;
+const POPOUTS_SHIFT_Y = 0;
 let outerRadius = Math.min(canvas.width/2, canvas.height)/2 - OUTER_PADDING;
 let innerRadius = outerRadius/2;
 let textRadius = (outerRadius + innerRadius)/2;
-const miniRadius = 20;
+const miniRadius = 40;
 let popoutRadius = textRadius;
 let centerY = canvas.height-outerRadius;
 const RIGHT_OFFSET = Math.PI/2;
@@ -21,10 +23,10 @@ const RIGHT_OFFSET = Math.PI/2;
 const nLeft = 4;
 const nRight = 5;
 const keyTable = [
-    [null, 'U', 'J', 'Q', 'C', 'M'],
-    [null, 'F', null, 'Z', 'K', 'Y'],
+    ['', 'U', 'J', 'Q', 'C', 'M'],
+    ['', 'F', '', 'Z', 'K', 'Y'],
     ['G', 'O', 'X', 'W', 'N', 'D'],
-    ['S', 'T', 'H', 'A', 'I', ' '],
+    ['S', 'T', 'H', 'A', 'I', '_'],
     ['B', 'R', 'P', 'V', 'L', 'E']
 ];
 
@@ -135,17 +137,12 @@ canvas.addEventListener('pointerdown', e => {
 canvas.addEventListener('pointermove', e => {
     if (!pointers.has(e.pointerId)) // Review
         return;
-
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     pointers.set(e.pointerId, { x: x, y: y });
-    const oldLeftPressed = leftPressed;
-    const oldRightPressed = rightPressed;
     release([...pointers.values()]);
     press([...pointers.values()]);
-    if (oldLeftPressed != leftPressed || oldRightPressed != rightPressed)
-        bufferInput(keyTable[leftPressed][rightPressed])
 });
 canvas.addEventListener('pointerup', e => {
     pointers.delete(e.pointerId);
@@ -157,6 +154,8 @@ canvas.addEventListener('pointercancel', e => {
 });
 
 function press(points) {
+    const oldLeftPressed = leftPressed;
+    const oldRightPressed = rightPressed;
     for (let i = 0; i < leftKeys.length; i++) {
         const key = leftKeys[i];
         for (const point of points) {
@@ -179,6 +178,8 @@ function press(points) {
         if (rightPressed == i + 1)
             break;
     }
+    if (oldLeftPressed != leftPressed || oldRightPressed != rightPressed)
+        bufferInput(keyTable[leftPressed][rightPressed])
     //console.log(keyTable[leftPressed][rightPressed]);
 }
 
