@@ -39,17 +39,22 @@ canvas {
 #textbox {
     box-sizing: border-box;
     width: calc(100% - 4rem);
-    height: 38vh;
+    /*height: 38vh;*/
     position: absolute;
-    top: 1rem;
+    top: 10rem;
     left: 2rem;
     padding: 1rem;
-    border: 1px solid white;
-    border-radius: 3px;
+    /*border: 1px solid white;
+    border-radius: 3px;*/
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1rem;
 
     white-space: normal;
     overflow-wrap: break-word;
-    font-size: 32px;
+    font-size: 42px;
 
     color: white;
     font-family: monospace;

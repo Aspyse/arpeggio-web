@@ -48,3 +48,19 @@ function typeout(input) {
         input = ' ';
     textbox.innerHTML += input;
 }
+
+const TEST_LENGTH = 100;
+function generateTest() {
+    for (let i = 0; i < TEST_LENGTH; i++) {
+        const word = english200[Math.floor(Math.random()*english200.length)];
+        const wordElement = document.createElement("div");
+        word.split('').forEach(letter => {
+            const letterElement = document.createElement("letter");
+            const content = document.createTextNode(letter);
+            letterElement.appendChild(content);
+            wordElement.appendChild(letterElement);
+        });
+        textbox.appendChild(wordElement);
+    }
+}
+generateTest();

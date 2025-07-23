@@ -8,17 +8,18 @@ canvas.height = canvas.clientHeight;
 //const outerRadius = 100;
 //const innerRadius = 50;
 const OUTER_PADDING = 0;
-//const LEGENDS_SHIFT_Y = 15;
-//const POPOUTS_SHIFT_Y = 30;
+const MINI_RADIUS = 40;
 const LEGENDS_SHIFT_Y = -5;
 const POPOUTS_SHIFT_Y = 0;
+const RIGHT_OFFSET = Math.PI/2;
+
 let outerRadius = Math.min(canvas.width/2, canvas.height)/2 - OUTER_PADDING;
 let innerRadius = outerRadius/2;
 let textRadius = (outerRadius + innerRadius)/2;
-const miniRadius = 40;
 let popoutRadius = textRadius;
+let cheatsheetOffset = outerRadius*2;
+
 let centerY = canvas.height-outerRadius;
-const RIGHT_OFFSET = Math.PI/2;
 
 const nLeft = 4;
 const nRight = 5;
@@ -68,6 +69,7 @@ function buildKeys() {
     innerRadius = outerRadius/2;
     textRadius = (outerRadius + innerRadius)/2;
     popoutRadius = textRadius;
+    cheatsheetOffset = outerRadius*2;
     centerY = canvas.height-outerRadius;
 
     const leftCenterX = canvas.width/4;
@@ -90,8 +92,8 @@ function buildKeys() {
         const popoutCenterY = centerY + popoutRadius*Math.sin(midAngle) + POPOUTS_SHIFT_Y;
         for (let j = 0; j < nRight; j++) {
             const popoutAngle = rightCentralAngle*j - RIGHT_OFFSET + rightCentralAngle/2;
-            const popoutX = popoutCenterX + miniRadius*Math.cos(popoutAngle);
-            const popoutY = popoutCenterY + miniRadius*Math.sin(popoutAngle);
+            const popoutX = popoutCenterX + MINI_RADIUS*Math.cos(popoutAngle);
+            const popoutY = popoutCenterY + MINI_RADIUS*Math.sin(popoutAngle);
             leftPopouts[i][j] = { x: popoutX, y: popoutY };
         }
     }
@@ -111,8 +113,8 @@ function buildKeys() {
         const popoutCenterY = centerY + popoutRadius*Math.sin(midAngle) + POPOUTS_SHIFT_Y;
         for (let j = 0; j < nLeft; j++) {
             const popoutAngle = leftCentralAngle*(j + 0.5);
-            const popoutX = popoutCenterX + miniRadius*Math.cos(popoutAngle);
-            const popoutY = popoutCenterY + miniRadius*Math.sin(popoutAngle);
+            const popoutX = popoutCenterX + MINI_RADIUS*Math.cos(popoutAngle);
+            const popoutY = popoutCenterY + MINI_RADIUS*Math.sin(popoutAngle);
             rightPopouts[i][j] = { x: popoutX, y: popoutY };
         }
     }
@@ -132,7 +134,7 @@ canvas.addEventListener('pointerdown', e => {
     const y = e.clientY - rect.top;
     pointers.set(e.pointerId, { x: x, y: y });
     press([...pointers.values()]);
-    bufferInput(keyTable[leftPressed][rightPressed])
+    //bufferInput(keyTable[leftPressed][rightPressed])
 });
 canvas.addEventListener('pointermove', e => {
     if (!pointers.has(e.pointerId)) // Review
@@ -268,27 +270,28 @@ function draw() {
         });
     }
 
+    // Cheatsheet
     ctx.fillStyle = "gray";
     ctx.textAlign = "center";
     ctx.font = "36px Arial";
 
     leftLegends.forEach((legend, i) => {
-        ctx.fillText(keyTable[i + 1][rightPressed], legend.x, legend.y - 480);
+        ctx.fillText(keyTable[i + 1][rightPressed], legend.x, legend.y - cheatsheetOffset);
     });
     rightLegends.forEach((legend, i) => {
-        ctx.fillText(keyTable[leftPressed][i + 1], legend.x, legend.y - 480);
+        ctx.fillText(keyTable[leftPressed][i + 1], legend.x, legend.y - cheatsheetOffset);
     });
 
     ctx.font = "italic 18px Arial";
 
     for (let i = 0; i < nLeft; i++) {
         leftPopouts[i].forEach((popout, j) => {
-            ctx.fillText(keyTable[i + 1][j + 1], popout.x, popout.y - 480);
+            ctx.fillText(keyTable[i + 1][j + 1], popout.x, popout.y - cheatsheetOffset);
         });
     }
     for (let i = 0; i < nRight; i++) {
         rightPopouts[i].forEach((popout, j) => {
-            ctx.fillText(keyTable[j + 1][i + 1], popout.x, popout.y - 480);
+            ctx.fillText(keyTable[j + 1][i + 1], popout.x, popout.y - cheatsheetOffset);
         });
     }
 
