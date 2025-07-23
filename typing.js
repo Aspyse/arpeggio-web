@@ -1,5 +1,6 @@
 const textbox = document.getElementById('textbox');
 
+const DISPLAY_LINES = 4;
 const GRACE_MS = 60;
 const english200 = [
     "the","of","to","and","a","in","is","it","you","that",
@@ -42,15 +43,53 @@ function bufferInput(input) {
     }, GRACE_MS);
 }
 
+const timestamps = [];
+const typed = [[]];
+let word_pos = 0;
+let letter_pos = 0;
 function typeout(input) {
-    console.log(input);
-    if (input == '_')
+    //console.log(input);
+    /*if (input == '_')
         input = ' ';
     textbox.innerHTML += input;
+    */
+    const word = test[word_pos]
+    const correct = word.children[letter_pos];
+
+    if (correct)
+        console.log(correct);
+
+    if (input == '_') {
+        const tempWord = [];
+        typed.push(tempWord);
+        word_pos++;
+    }
+    else {
+        typed[word_pos].push(input);
+        letter_pos++;
+        if (!correct) {
+            const letterElement = document.createElement("letter");
+            const content = document.createTextNode(input);
+            letterElement.classList.add('incorrect');
+            letterElement.appendChild(content);
+            word.appendChild(letterElement);
+        }
+        else if (input != correct.innerHTML) {
+            correct.classList.add('incorrect');
+        }
+        else if (input == correct.innerHTML) {
+            console.log(hello);
+            correct.classList.add('correct')
+        }
+    }
 }
 
+const test = []
 const TEST_LENGTH = 100;
 function generateTest() {
+    word_pos = 0;
+    letter_pos = 0;
+    let h = 0;
     for (let i = 0; i < TEST_LENGTH; i++) {
         const word = english200[Math.floor(Math.random()*english200.length)];
         const wordElement = document.createElement("div");
@@ -60,7 +99,14 @@ function generateTest() {
             letterElement.appendChild(content);
             wordElement.appendChild(letterElement);
         });
+        test.push(wordElement)
         textbox.appendChild(wordElement);
+        h = Math.max(wordElement.offsetHeight, h)
     }
+
+    console.log(h);
+
+    const gap = parseInt(getComputedStyle(textbox).rowGap);
+    textbox.style.maxHeight = `${(h + gap)*DISPLAY_LINES}px`;
 }
 generateTest();

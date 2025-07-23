@@ -13,6 +13,11 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+:root {
+  --color-success: white;
+  --color-error:   #C62828;
+}
+
 html,
 body {
     overflow: hidden;
@@ -39,7 +44,7 @@ canvas {
 #textbox {
     box-sizing: border-box;
     width: calc(100% - 4rem);
-    /*height: 38vh;*/
+    overflow: hidden;
     position: absolute;
     top: 10rem;
     left: 2rem;
@@ -56,7 +61,15 @@ canvas {
     overflow-wrap: break-word;
     font-size: 42px;
 
-    color: white;
+    color: lightgray;
     font-family: monospace;
     text-transform: lowercase;
+}
+
+.incorrect {
+    color: var(--color-error);
+}
+
+.correct {
+    color: var(--color-success);
 }

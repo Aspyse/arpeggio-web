@@ -23,13 +23,20 @@ let centerY = canvas.height-outerRadius;
 
 const nLeft = 4;
 const nRight = 5;
-const keyTable = [
+/*const keyTable = [
     ['', 'U', 'J', 'Q', 'C', 'M'],
     ['', 'F', '', 'Z', 'K', 'Y'],
     ['G', 'O', 'X', 'W', 'N', 'D'],
     ['S', 'T', 'H', 'A', 'I', '_'],
     ['B', 'R', 'P', 'V', 'L', 'E']
-];
+];*/
+const keyTable = [
+    ['', 'P', 'X', 'M', '', 'Y'],
+    ['Q', 'Z', 'C', 'A', 'L', 'K'],
+    ['B', 'J', 'U', 'W', 'S', 'I'],
+    ['', 'G', 'O', 'T', '_', 'N'],
+    ['F', 'V', 'R', 'H', 'E', 'D']
+]
 
 function makeButton(centerX, centerY, startAngle, endAngle) {
     let path = new Path2D();
@@ -257,6 +264,7 @@ function draw() {
         ctx.fillText(keyTable[leftPressed][i + 1], legend.x, legend.y);
     });
 
+    /*
     ctx.font = "italic 18px Arial";
 
     for (let i = 0; i < nLeft; i++) {
@@ -269,17 +277,18 @@ function draw() {
             ctx.fillText(keyTable[j + 1][i + 1], popout.x, popout.y);
         });
     }
+        */
 
     // Cheatsheet
     ctx.fillStyle = "gray";
     ctx.textAlign = "center";
-    ctx.font = "36px Arial";
+    ctx.font = "28px Arial";
 
     leftLegends.forEach((legend, i) => {
-        ctx.fillText(keyTable[i + 1][rightPressed], legend.x, legend.y - cheatsheetOffset);
+        ctx.fillText(keyTable[i + 1][0], legend.x, legend.y - cheatsheetOffset);
     });
     rightLegends.forEach((legend, i) => {
-        ctx.fillText(keyTable[leftPressed][i + 1], legend.x, legend.y - cheatsheetOffset);
+        ctx.fillText(keyTable[0][i + 1], legend.x, legend.y - cheatsheetOffset);
     });
 
     ctx.font = "italic 18px Arial";
