@@ -53,15 +53,19 @@ function typeout(input) {
         input = ' ';
     textbox.innerHTML += input;
     */
+    console.log(word_pos);
     const word = test[word_pos]
     const correct = word.children[letter_pos];
-
-    if (correct)
-        console.log(correct);
 
     if (input == '_') {
         const tempWord = [];
         typed.push(tempWord);
+
+        if (letter_pos < word.children.length)
+            for (; letter_pos < word.children.length; letter_pos++)
+                word.children[letter_pos].classList.add('incorrect')
+
+        letter_pos = 0;
         word_pos++;
     }
     else {
