@@ -11,7 +11,7 @@ const OUTER_PADDING = 0;
 const MINI_RADIUS = 40;
 const LEGENDS_SHIFT_Y = -5;
 const POPOUTS_SHIFT_Y = 0;
-const RIGHT_OFFSET = Math.PI/2;
+const RIGHT_OFFSET = (-3/20)*2*Math.PI;
 
 let outerRadius = Math.min(canvas.width/2, canvas.height)/2 - OUTER_PADDING;
 let innerRadius = outerRadius/2;
@@ -264,7 +264,6 @@ function draw() {
         ctx.fillText(keyTable[leftPressed][i + 1], legend.x, legend.y);
     });
 
-    /*
     ctx.font = "italic 18px Arial";
 
     for (let i = 0; i < nLeft; i++) {
@@ -277,32 +276,46 @@ function draw() {
             ctx.fillText(keyTable[j + 1][i + 1], popout.x, popout.y);
         });
     }
-        */
 
     // Cheatsheet
+    ctx.strokeStyle = "gray";
+    ctx.save();
+    ctx.translate(0, -cheatsheetOffset);
+    ctx.translate(canvas.width/2, canvas.height);
+    ctx.scale(0.9, 0.9);
+    ctx.translate(-canvas.width/2, -(canvas.height));
+    leftKeys.forEach(key => {
+        ctx.stroke(key);
+    });
+
+    rightKeys.forEach(key => {
+        ctx.stroke(key);
+    });
+
     ctx.fillStyle = "gray";
     ctx.textAlign = "center";
     ctx.font = "28px Arial";
 
     leftLegends.forEach((legend, i) => {
-        ctx.fillText(keyTable[i + 1][0], legend.x, legend.y - cheatsheetOffset);
+        ctx.fillText(keyTable[i + 1][0], legend.x, legend.y);
     });
     rightLegends.forEach((legend, i) => {
-        ctx.fillText(keyTable[0][i + 1], legend.x, legend.y - cheatsheetOffset);
+        ctx.fillText(keyTable[0][i + 1], legend.x, legend.y);
     });
 
     ctx.font = "italic 18px Arial";
 
     for (let i = 0; i < nLeft; i++) {
         leftPopouts[i].forEach((popout, j) => {
-            ctx.fillText(keyTable[i + 1][j + 1], popout.x, popout.y - cheatsheetOffset);
+            ctx.fillText(keyTable[i + 1][j + 1], popout.x, popout.y);
         });
     }
     for (let i = 0; i < nRight; i++) {
         rightPopouts[i].forEach((popout, j) => {
-            ctx.fillText(keyTable[j + 1][i + 1], popout.x, popout.y - cheatsheetOffset);
+            ctx.fillText(keyTable[j + 1][i + 1], popout.x, popout.y);
         });
     }
+    ctx.restore();
 
     requestAnimationFrame(draw);
 }

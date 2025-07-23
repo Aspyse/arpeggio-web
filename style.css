@@ -59,9 +59,11 @@ canvas {
 
     white-space: normal;
     overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
     font-size: 42px;
 
-    color: lightgray;
+    color: gray;
     font-family: monospace;
     text-transform: lowercase;
 }

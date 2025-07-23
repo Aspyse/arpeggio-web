@@ -74,11 +74,10 @@ function typeout(input) {
             letterElement.appendChild(content);
             word.appendChild(letterElement);
         }
-        else if (input != correct.innerHTML) {
+        else if (input != correct.innerHTML.toUpperCase()) {
             correct.classList.add('incorrect');
         }
-        else if (input == correct.innerHTML) {
-            console.log(hello);
+        else if (input == correct.innerHTML.toUpperCase()) {
             correct.classList.add('correct')
         }
     }
