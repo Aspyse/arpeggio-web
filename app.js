@@ -11,7 +11,14 @@ const OUTER_PADDING = 0;
 const MINI_RADIUS = 40;
 const LEGENDS_SHIFT_Y = -5;
 const POPOUTS_SHIFT_Y = 0;
-const RIGHT_OFFSET = (-3/20)*2*Math.PI;
+
+const IS_SWAP_RINGS = false;
+const LEFT_START = 4;
+const RIGHT_START = 3;
+const IS_FLIP_LEFT = true;
+const IS_FLIP_RIGHT = true;
+const LEFT_OFFSET = (3-8*LEFT_START)/40*2*Math.PI;
+const RIGHT_OFFSET = (1+8*RIGHT_START)/40*2*Math.PI;
 
 let outerRadius = Math.min(canvas.width/2, canvas.height)/2 - OUTER_PADDING;
 let innerRadius = outerRadius/2;
@@ -21,22 +28,34 @@ let cheatsheetOffset = outerRadius*2;
 
 let centerY = canvas.height-outerRadius;
 
-const nLeft = 4;
-const nRight = 5;
-/*const keyTable = [
-    ['', 'U', 'J', 'Q', 'C', 'M'],
-    ['', 'F', '', 'Z', 'K', 'Y'],
-    ['G', 'O', 'X', 'W', 'N', 'D'],
-    ['S', 'T', 'H', 'A', 'I', '_'],
-    ['B', 'R', 'P', 'V', 'L', 'E']
-];*/
-const keyTable = [
-    ['', 'P', 'X', 'M', '', 'Y'],
-    ['Q', 'Z', 'C', 'A', 'L', 'K'],
-    ['B', 'J', 'U', 'W', 'S', 'I'],
-    ['', 'G', 'O', 'T', '_', 'N'],
-    ['F', 'V', 'R', 'H', 'E', 'D']
-]
+const N_LEFT = 5;
+const N_RIGHT = 5;
+
+const baseTable = [
+  ['',   'L', 'E', ' ',  'S',  'T'],
+  ['F',  'Y', 'D', 'M',  'O',  'R'],
+  ['J',  'Z', 'A', 'B',  'U',  'Q'],
+  ['HA', 'V', 'X', 'C',  'H',  '' ],
+  ['P',  'AR','AT','TH', 'G',  'ER'],
+  ['W',  'EN','AN','I',  'N',  'K'],
+];
+
+let keyTable = baseTable;
+
+// Transform key table
+if (IS_SWAP_RINGS)
+    keyTable = keyTable[0].map((_, colIndex) => keyTable.map(row => row[colIndex]));
+if (IS_FLIP_LEFT) {
+    const body = keyTable.slice(1).reverse();
+    keyTable = [keyTable[0], ...body];
+}
+if (IS_FLIP_RIGHT) {
+    keyTable = keyTable.map(row => {
+        const body = row.slice(1).reverse();
+        return [row[0], ...body];
+    });
+}
+
 
 function makeButton(centerX, centerY, startAngle, endAngle) {
     let path = new Path2D();
@@ -64,9 +83,9 @@ const leftLegends = [];
 const rightLegends = [];
 const leftPopouts = [];
 const rightPopouts = [];
-for (let i = 0; i < nLeft; i++)
+for (let i = 0; i < N_LEFT; i++)
     leftPopouts[i] = []
-for (let i = 0; i < nRight; i++)
+for (let i = 0; i < N_RIGHT; i++)
     rightPopouts[i] = []
 function buildKeys() {
     canvas.width = canvas.clientWidth;
@@ -80,13 +99,13 @@ function buildKeys() {
     centerY = canvas.height-outerRadius;
 
     const leftCenterX = canvas.width/4;
-    const leftCentralAngle = 2*Math.PI/nLeft;
+    const leftCentralAngle = 2*Math.PI/N_LEFT;
     const rightCenterX = canvas.width*3/4;
-    const rightCentralAngle = 2*Math.PI/nRight;
+    const rightCentralAngle = 2*Math.PI/N_RIGHT;
 
-    for (let i = 0; i < nLeft; i++) {
-        const startAngle = leftCentralAngle*i;
-        const endAngle = leftCentralAngle*(i + 1);
+    for (let i = 0; i < N_LEFT; i++) {
+        const startAngle = leftCentralAngle*i - LEFT_OFFSET;
+        const endAngle = startAngle + leftCentralAngle;
 
         leftKeys[i] = makeButton(leftCenterX, centerY, startAngle, endAngle);
 
@@ -97,7 +116,7 @@ function buildKeys() {
 
         const popoutCenterX = leftCenterX + popoutRadius*Math.cos(midAngle);
         const popoutCenterY = centerY + popoutRadius*Math.sin(midAngle) + POPOUTS_SHIFT_Y;
-        for (let j = 0; j < nRight; j++) {
+        for (let j = 0; j < N_RIGHT; j++) {
             const popoutAngle = rightCentralAngle*j - RIGHT_OFFSET + rightCentralAngle/2;
             const popoutX = popoutCenterX + MINI_RADIUS*Math.cos(popoutAngle);
             const popoutY = popoutCenterY + MINI_RADIUS*Math.sin(popoutAngle);
@@ -105,7 +124,7 @@ function buildKeys() {
         }
     }
 
-    for (let i = 0; i < nRight; i++) {
+    for (let i = 0; i < N_RIGHT; i++) {
         const startAngle = rightCentralAngle*i - RIGHT_OFFSET;
         const endAngle = startAngle + rightCentralAngle;
 
@@ -118,8 +137,8 @@ function buildKeys() {
 
         const popoutCenterX = rightCenterX + popoutRadius*Math.cos(midAngle);
         const popoutCenterY = centerY + popoutRadius*Math.sin(midAngle) + POPOUTS_SHIFT_Y;
-        for (let j = 0; j < nLeft; j++) {
-            const popoutAngle = leftCentralAngle*(j + 0.5);
+        for (let j = 0; j < N_LEFT; j++) {
+            const popoutAngle = leftCentralAngle*j - LEFT_OFFSET + leftCentralAngle/2;
             const popoutX = popoutCenterX + MINI_RADIUS*Math.cos(popoutAngle);
             const popoutY = popoutCenterY + MINI_RADIUS*Math.sin(popoutAngle);
             rightPopouts[i][j] = { x: popoutX, y: popoutY };
@@ -266,12 +285,12 @@ function draw() {
 
     ctx.font = "italic 18px Arial";
 
-    for (let i = 0; i < nLeft; i++) {
+    for (let i = 0; i < N_LEFT; i++) {
         leftPopouts[i].forEach((popout, j) => {
             ctx.fillText(keyTable[i + 1][j + 1], popout.x, popout.y);
         });
     }
-    for (let i = 0; i < nRight; i++) {
+    for (let i = 0; i < N_RIGHT; i++) {
         rightPopouts[i].forEach((popout, j) => {
             ctx.fillText(keyTable[j + 1][i + 1], popout.x, popout.y);
         });
@@ -305,12 +324,12 @@ function draw() {
 
     ctx.font = "italic 18px Arial";
 
-    for (let i = 0; i < nLeft; i++) {
+    for (let i = 0; i < N_LEFT; i++) {
         leftPopouts[i].forEach((popout, j) => {
             ctx.fillText(keyTable[i + 1][j + 1], popout.x, popout.y);
         });
     }
-    for (let i = 0; i < nRight; i++) {
+    for (let i = 0; i < N_RIGHT; i++) {
         rightPopouts[i].forEach((popout, j) => {
             ctx.fillText(keyTable[j + 1][i + 1], popout.x, popout.y);
         });

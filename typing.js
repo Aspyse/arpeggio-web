@@ -55,7 +55,6 @@ function typeout(input) {
     */
     console.log(word_pos);
     const word = test[word_pos]
-    const correct = word.children[letter_pos];
 
     if (input == '_') {
         const tempWord = [];
@@ -69,20 +68,23 @@ function typeout(input) {
         word_pos++;
     }
     else {
-        typed[word_pos].push(input);
-        letter_pos++;
-        if (!correct) {
-            const letterElement = document.createElement("letter");
-            const content = document.createTextNode(input);
-            letterElement.classList.add('incorrect');
-            letterElement.appendChild(content);
-            word.appendChild(letterElement);
-        }
-        else if (input != correct.innerHTML.toUpperCase()) {
-            correct.classList.add('incorrect');
-        }
-        else if (input == correct.innerHTML.toUpperCase()) {
-            correct.classList.add('correct')
+        for (const letter of input) {
+            typed[word_pos].push(letter);
+            const correct = word.children[letter_pos];
+            letter_pos++;
+            if (!correct) {
+                const letterElement = document.createElement("letter");
+                const content = document.createTextNode(input);
+                letterElement.classList.add('incorrect');
+                letterElement.appendChild(content);
+                word.appendChild(letterElement);
+            }
+            else if (input != correct.innerHTML.toUpperCase()) {
+                correct.classList.add('incorrect');
+            }
+            else if (input == correct.innerHTML.toUpperCase()) {
+                correct.classList.add('correct')
+            }
         }
     }
 }
