@@ -74,15 +74,15 @@ function typeout(input) {
             letter_pos++;
             if (!correct) {
                 const letterElement = document.createElement("letter");
-                const content = document.createTextNode(input);
+                const content = document.createTextNode(letter);
                 letterElement.classList.add('incorrect');
                 letterElement.appendChild(content);
                 word.appendChild(letterElement);
             }
-            else if (input != correct.innerHTML.toUpperCase()) {
+            else if (letter != correct.innerHTML.toUpperCase()) {
                 correct.classList.add('incorrect');
             }
-            else if (input == correct.innerHTML.toUpperCase()) {
+            else if (letter == correct.innerHTML.toUpperCase()) {
                 correct.classList.add('correct')
             }
         }
