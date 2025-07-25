@@ -32,7 +32,7 @@ const N_LEFT = 5;
 const N_RIGHT = 5;
 
 const baseTable = [
-  ['',   'L', 'E', ' ',  'S',  'T'],
+  ['',   'L', 'E', '_',  'S',  'T'],
   ['F',  'Y', 'D', 'M',  'O',  'R'],
   ['J',  'Z', 'A', 'B',  'U',  'Q'],
   ['HA', 'V', 'X', 'C',  'H',  '' ],
