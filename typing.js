@@ -1,7 +1,7 @@
 const textbox = document.getElementById('textbox');
 
 const DISPLAY_LINES = 4;
-const GRACE_MS = 60;
+const GRACE_MS = 100;
 const english200 = [
     "the","of","to","and","a","in","is","it","you","that",
     "he","was","for","on","are","with","as","I","his","they",

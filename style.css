@@ -4,7 +4,6 @@
     min-width: none;
     margin: 0;
     padding: 0;
-    overscroll-behavior: none;
 
     background-color: #111111;
     -webkit-user-select: none;      /* standard */
@@ -23,7 +22,7 @@ body {
     overflow: hidden;
     width: 100%;
     height: 100%;
-    overscroll-behavior: none;
+    /*overscroll-behavior: auto;*/
     touch-action: none;
 }
 
@@ -39,6 +38,8 @@ canvas {
     position: absolute;
     left: 0;
     bottom: 0;
+
+    /*overscroll-behavior: contain;*/
 }
 
 #textbox {
